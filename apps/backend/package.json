@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@aws-lambda-powertools/logger": "^2.21.0",
     "@standora/common": "workspace:*",
+    "@standora/aws": "workspace:*",
+    "@standora/core": "workspace:*",
     "aws-cdk-lib": "2.179.0",
     "bcrypt": "^5.1.1",
     "constructs": "^10.0.0",

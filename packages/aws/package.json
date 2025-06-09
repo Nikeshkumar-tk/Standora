@@ -1,8 +1,8 @@
 {
-  "name": "@standora/common",
+  "name": "@standora/aws",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,13 +11,12 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@standora/aws": "workspace:*",
+    "@standora/common": "workspace:*",
     "@aws-lambda-powertools/logger": "^2.21.0",
-    "uninstall": "^0.0.0",
-    "zod": "^3.24.2"
+    "@aws-sdk/client-dynamodb": "^3.826.0",
+    "@aws-sdk/lib-dynamodb": "^3.826.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.149",
     "@types/node": "^22.15.30"
   }
 }
