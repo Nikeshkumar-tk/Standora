@@ -1,13 +1,16 @@
-import { randomBytes } from "crypto";
-import { getDdbItem, putBatchItems, putDdbItem } from "../../client";
-import { CreateUserInput, User, UserAuthType } from "./types";
-import { DbError, NotProvidedError } from "@standora/common/error";
 import { Logger } from "@aws-lambda-powertools/logger";
+import { DbError, NotProvidedError } from "@standora/common/error";
 import { generateIdWithPrefix } from "@standora/common/utils/common";
+import { getDdbItem, putBatchItems } from "../../client";
+import { CreateUserInput, User, UserAuthType } from "./types";
 
 export class UserModel {
-  static getPk() {
-    return `USER`;
+  static getIdPk({ id }: { id: string }) {
+    return `USER#${id}`;
+  }
+
+  static getEmailPk({ email }: { email: string }) {
+    return `USER#${email}`;
   }
 
   static getEmailSk({ email }: { email: string }) {
@@ -26,9 +29,8 @@ export class UserModel {
 
     const currentTimeStamp = Date.now();
 
-    const userObj: User = {
+    const userObj: Omit<User, "PK"> = {
       ...userData,
-      PK: this.getPk(),
       createdAt: currentTimeStamp,
       updatedAt: currentTimeStamp,
       id: generateIdWithPrefix({ prefix: "user" }),
@@ -37,10 +39,14 @@ export class UserModel {
 
     const dbItems = [
       {
-        item: { ...userObj, SK: this.getEmailSk({ email: userObj.email }) },
+        ...userObj,
+        PK: this.getIdPk({ id: userObj.id }),
+        SK: this.getIdSk({ id: userObj.id }),
       },
       {
-        item: { ...userObj, SK: this.getIdSk({ id: userObj.id }) },
+        ...userObj,
+        PK: this.getEmailPk({ email: userObj.email }),
+        SK: this.getEmailSk({ email: userObj.email }),
       },
     ];
 
@@ -61,7 +67,7 @@ export class UserModel {
     logger: Logger;
   }) {
     const user = await getDdbItem<User>({
-      pk: this.getPk(),
+      pk: this.getEmailPk({ email }),
       sk: this.getEmailSk({ email }),
       logger,
     });
@@ -70,7 +76,7 @@ export class UserModel {
 
   static async getUserById({ id, logger }: { id: string; logger: Logger }) {
     const user = await getDdbItem<User>({
-      pk: this.getPk(),
+      pk: this.getIdPk({ id }),
       sk: this.getIdSk({ id }),
       logger,
     });

@@ -23,7 +23,7 @@ export class StandoraStack extends Stack {
       stage: STAGE,
     });
 
-    this.table = new DynamoDBTable(this, "standor-table", {
+    this.table = new DynamoDBTable(this, "standora-table", {
       tableName: createResourceName("table", STAGE),
     });
 
