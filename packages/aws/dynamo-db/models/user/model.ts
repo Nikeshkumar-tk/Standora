@@ -3,8 +3,9 @@ import { DbError, NotProvidedError } from "@standora/common/error";
 import { generateIdWithPrefix } from "@standora/common/utils/common";
 import { getDdbItem, putBatchItems } from "../../client";
 import { CreateUserInput, User, UserAuthType } from "./types";
-
+import bcrypt from "@standora/layers/nodejs/bcrypt";
 export class UserModel {
+  static passwordHashSaltRounds: number = 10;
   static getIdPk({ id }: { id: string }) {
     return `USER#${id}`;
   }
@@ -23,8 +24,15 @@ export class UserModel {
 
   static async createUser(input: CreateUserInput) {
     const { logger, ...userData } = input;
-    if (input.authType === UserAuthType.Credentials && !input.password) {
+
+    if (userData.authType === UserAuthType.Credentials && !userData.password) {
       throw new NotProvidedError("Password not provided");
+    }
+
+    if (userData.authType === UserAuthType.Credentials) {
+      userData.password = await this.hashUserPassword({
+        password: userData.password as string,
+      });
     }
 
     const currentTimeStamp = Date.now();
@@ -81,5 +89,25 @@ export class UserModel {
       logger,
     });
     return user;
+  }
+
+  static async hashUserPassword({
+    password,
+  }: {
+    password: string;
+  }): Promise<string> {
+    const salt = await bcrypt.genSalt(this.passwordHashSaltRounds);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    return hashedPassword;
+  }
+
+  static async verifyPassword({
+    password,
+    hash,
+  }: {
+    password: string;
+    hash: string;
+  }) {
+    return await bcrypt.compare(password, hash);
   }
 }

@@ -12,6 +12,7 @@
   "dependencies": {
     "@aws-lambda-powertools/logger": "^2.21.0",
     "@standora/common": "workspace:*",
+    "@standora/layers": "workspace:*",
     "@standora/aws": "workspace:*",
     "@standora/core": "workspace:*",
     "aws-cdk-lib": "2.179.0",

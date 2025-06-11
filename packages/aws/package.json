@@ -11,10 +11,12 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@standora/common": "workspace:*",
     "@aws-lambda-powertools/logger": "^2.21.0",
     "@aws-sdk/client-dynamodb": "^3.826.0",
-    "@aws-sdk/lib-dynamodb": "^3.826.0"
+    "@aws-sdk/lib-dynamodb": "^3.826.0",
+    "@standora/common": "workspace:*",
+    "@standora/layers": "workspace:*",
+    "zod": "3.24.2"
   },
   "devDependencies": {
     "@types/node": "^22.15.30"

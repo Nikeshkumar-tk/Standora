@@ -5,7 +5,8 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "deploy:backend": "cd apps/backend && npx cdk deploy",
+    "build:layers": "cd packages/layers && npm run build",
+    "deploy:backend": "npm run build:layers && cd apps/backend && npx cdk deploy",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types"
   },

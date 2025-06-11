@@ -1,6 +1,7 @@
 import { LambdaConfig } from "@standora/common/types";
 import { handler as lambdaHandler } from "./handler";
 import { createLambdaHandler } from "@standora/common/utils/lambda";
+import { LambdaLayerLibs } from "@standora/layers/config";
 
 export const config: LambdaConfig = {
   name: "authentication",
@@ -18,4 +19,8 @@ export const config: LambdaConfig = {
   ],
 };
 
-export const handler = createLambdaHandler({ handler: lambdaHandler, config });
+export const handler = createLambdaHandler({
+  handler: lambdaHandler,
+  config,
+  layers: [LambdaLayerLibs.Bcrypt],
+});
